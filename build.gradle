@@ -167,6 +167,10 @@ dependencies {
 	// Add from 2018
 	compile 'org.web3j:core:3.1.1'
 	compile 'org.bouncycastle:bcprov-jdk15on:[1.5,)'
+	compile 'org.bouncycastle:bcpkix-jdk15on:1.48'
+	compile 'org.seleniumhq.selenium:selenium-java:3.0.1'
+	compile 'org.jxta.platform:jxta:2.3.6'
+	compile 'jaxen:jaxen:1.1.6'
 	
 	compile 'org.glassfish.jersey.core:jersey-server:2.7'
 	compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.7'

@@ -95,6 +95,7 @@ public class JxtaNode implements Node{
 		NetworkManager manager = null;
 		NetworkConfigurator configurator = null;
 		manager = new NetworkManager(NetworkManager.ConfigMode.RENDEZVOUS, peerName, configFile.toURI()); /* Setting network */
+
 		configurator = manager.getConfigurator(); /* Getting configurator for future tweaks */
         configurator.setTcpEnabled(true);
         configurator.setHttpEnabled(true);

@@ -19,6 +19,17 @@ import java.util.Date;
 import javax.security.auth.x500.X500Principal;
 
 import org.bouncycastle.x509.X509V3CertificateGenerator;
+import org.bouncycastle.cert.X509CertificateHolder; //2018
+import org.bouncycastle.cert.X509v3CertificateBuilder; //2018 [previous : *.X509V3CertificateGenerator]
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter; //2018
+import org.bouncycastle.jce.X509Principal; // 2018
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder; //2018
+import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.DEROctetString; //2018
+import org.bouncycastle.asn1.x500.X500Name; //2018
+import org.bouncycastle.asn1.x509.BasicConstraints; //2018
+import org.bouncycastle.asn1.x509.Extension; //2018
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 
 import crypt.api.certificate.CertificateGenerator;
 
@@ -146,7 +157,7 @@ public class X509V3Generator implements CertificateGenerator
 						this.sign_alg = value;
 						break;
 					case "domainname":
-						this.domain_name = value;
+						this.domain_name = "localhost"; //value;
 						break;
 					default:
 						throw new RuntimeException("Bad configuration file : " + line);
@@ -215,10 +226,32 @@ public class X509V3Generator implements CertificateGenerator
 				KeyPair keys = key_gen.genKeyPair();
 				this.key_pair = keys;
 
-				//Création du certificat.																												
-				X509V3CertificateGenerator cert_gen = new X509V3CertificateGenerator();
+				//Création du certificat.
+/* All lines finishing by comment "// 2018" were added instead of the previous commented code. 
+				X500Name cn = new X500Name("CN=" + domain_name ); // 2018
+				BigInteger serial = this.serial_number;  // 2018
+				Date notBefore = new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000); // 2018
+				Date notAfter = new Date(System.currentTimeMillis() + 365 * 24 * 60 * 60 * 1000); // 2018
+//				Date currentDate = new Date(System.currentTimeMillis()); // 2018
+				SubjectPublicKeyInfo publicKey = (SubjectPublicKeyInfo) this.key_pair.getPublic(); // 2018
+				String keyAlg = this.sign_alg; // 2018
+				
+				try (ASN1InputStream is = new ASN1InputStream(publicKey.getEncoded())) {
+					publicKey = SubjectPublicKeyInfo.getInstance(is.readObject());
+				}
 
-				X500Principal cn = new X500Principal("CN=" + domain_name );																		
+				X509v3CertificateBuilder cert_gen = new X509v3CertificateBuilder(cn, serial, notBefore, notAfter, cn, publicKey); // 2018
+				
+				cert_gen.addExtension(new Extension(Extension.basicConstraints, true, new DEROctetString(new BasicConstraints(false)))); // 2018
+				X509CertificateHolder certHolder = cert_gen.build(new JcaContentSignerBuilder(keyAlg).build(this.key_pair.getPrivate())); // 2018
+				
+				this.cert = new JcaX509CertificateConverter().getCertificate(certHolder);
+*/
+// Previous (original code)
+				X509V3CertificateGenerator cert_gen = new X509V3CertificateGenerator(); // 2018
+
+// previous				X500Principal cn = new X500Principal("CN=" + domain_name );																		
+				X509Principal cn = new X509Principal("CN=" + domain_name ); // 2018														
 				cert_gen.setSerialNumber(this.serial_number);																		
 				cert_gen.setIssuerDN(cn);																												
 				cert_gen.setNotBefore(new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000));									
@@ -229,6 +262,7 @@ public class X509V3Generator implements CertificateGenerator
 
 				//this.cert = cert_gen.generateX509Certificate(keys.getPrivate(), "BC"); //CA private key (autosigned)
 				this.cert = cert_gen.generate(keys.getPrivate(), "BC"); //CA private key (autosigned)
+
 				this.flag = true;
 			}
 		}
@@ -390,7 +424,7 @@ public class X509V3Generator implements CertificateGenerator
 		File file = new File(file_name);
 		if( file.exists() )
 		{
-			System.out.println("Keystore already exist");
+			System.out.print("Keystore already exist\n"); // 2018 / was : System.out.println("Keystore already exist");
 			return;
 		}
 
