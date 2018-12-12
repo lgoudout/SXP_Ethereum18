@@ -164,14 +164,6 @@ dependencies {
   	
 	compile 'org.apache.commons:commons-collections4:4.0'
 
-	// Add from 2018
-	compile 'org.web3j:core:3.1.1' // for blockChain interaction (with Geth)
-	compile 'org.slf4j:slf4j-simple:1.7.5' 
-	compile 'org.bouncycastle:bcpkix-jdk15on:1.60'
-//	compile 'org.seleniumhq.selenium:selenium-java:3.0.1'
-//	compile 'org.jxta.platform:jxta:2.3.6'
-//	compile 'jaxen:jaxen:1.1.6'
-	
 	compile 'org.glassfish.jersey.core:jersey-server:2.7'
 	compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.7'
 	compile 'org.glassfish.jersey.containers:jersey-container-servlet-core:2.7'
@@ -196,6 +188,14 @@ dependencies {
 	compile 'org.hibernate:hibernate-validator:5.3.3.Final'
 	compile 'javax.el:javax.el-api:2.2.4'
 	compile 'org.glassfish.web:javax.el:2.2.4'
+	
+	// Add from 2018
+	compile 'org.web3j:core:3.1.1' // for blockChain interaction (with Geth)
+	compile 'org.slf4j:slf4j-simple:1.7.5' 
+	compile 'org.bouncycastle:bcpkix-jdk15on:1.60' // Usefull for web3j, but uncomment to make SXP works (jxta compatibility issue)
+//	compile 'org.seleniumhq.selenium:selenium-java:3.0.1'
+//	compile 'org.jxta.platform:jxta:2.3.6'
+//	compile 'jaxen:jaxen:1.1.6'
 	
 	
 	testCompile 'org.apache.commons:commons-lang3:3.1'
